@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remarket - Second Hand Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #030213;
+            --primary-foreground: #ffffff;
+            --background: #ffffff;
+            --foreground: #0a0a0a;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --border: rgba(0, 0, 0, 0.1);
+            --card: #ffffff;
+            --card-foreground: #0a0a0a;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #030213;
+            --radius: 0.625rem;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 4rem;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #030213, #4338ca);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 32rem;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            background: #f3f3f5;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            color: var(--muted-foreground);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            color: var(--foreground);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-button:hover {
+            color: var(--primary);
+            background: var(--secondary);
+        }
+
+        .icon-button {
+            background: none;
+            border: 1px solid var(--border);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-button:hover {
+            background: var(--secondary);
+        }
+
+        /* Hero Styles */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #4338ca);
+            color: var(--primary-foreground);
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+            }
+        } */
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .hero-image {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-image {
+                display: block;
+            }
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 20rem;
+            object-fit: cover;
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-muted {
+            background: rgba(236, 236, 240, 0.3);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .category-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        .category-card {
+            position: relative;
+            cursor: pointer;
+            group: category-card;
+        }
+
+        .category-card-inner {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            background: var(--card);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s;
+        }
+
+        .category-card:hover .category-card-inner {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 8rem;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover .category-image {
+            transform: scale(1.05);
+        }
+
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-card:hover .category-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .category-text {
+            text-align: center;
+            color: white;
+        }
+
+        .category-text h3 {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .category-text p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Products Section */
+        .products-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .products-title h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .products-title p {
+            color: var(--muted-foreground);
+        }
+
+        .products-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .view-buttons {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .view-button {
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .product-card {
+            cursor: pointer;
+        }
+
+        .product-card-inner {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+
+        .product-card:hover .product-card-inner {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image-container {
+            position: relative;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-like-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-like-btn.liked {
+            color: #ef4444;
+        }
+
+        .product-condition {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--foreground);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .product-content {
+            padding: 1rem;
+        }
+
+        .product-title {
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-card:hover .product-title {
+            color: var(--primary);
+        }
+
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price-current {
+            font-size: 1.125rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .product-price-original {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            text-decoration: line-through;
+        }
+
+        .product-location {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .location-icon {
+            width: 0.75rem;
+            height: 0.75rem;
+            margin-right: 0.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section p {
+            opacity: 0.8;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            opacity: 0.6;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-12 {
+            margin-top: 3rem;
+        }
+
+        /* Icons */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .mobile-hidden {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-hidden {
+                display: flex;
+            }
+        }
+
+        .desktop-hidden {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .desktop-hidden {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                display: none;
+            }
+            
+            .nav {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <div class="logo-icon">R</div>
+                    <div class="logo-text">Remarket</div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <div style="position: relative;">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input 
+                            type="search" 
+                            placeholder="Search for items, categories, or brands..."
+                            class="search-input"
+                        />
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav mobile-hidden">
+                    <button class="nav-button">Browse</button>
+                    <button class="nav-button">Sell</button>
+                    <button class="icon-button">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                        </svg>
+                    </button>
+                    <button class="icon-button">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                        </svg>
+                    </button>
+                    <button class="icon-button">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </button>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button class="icon-button desktop-hidden">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" x2="20" y1="12" y2="12"></line>
+                        <line x1="4" x2="20" y1="6" y2="6"></line>
+                        <line x1="4" x2="20" y1="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Buy & Sell Everything Locally</h1>
+                    <p>Discover amazing deals on pre-loved items in your neighborhood. 
+                       From furniture to electronics, fashion to books - find it all here.</p>
+                    <!-- <div class="hero-buttons">
+                        <a href="#" class="btn btn-primary">Start Shopping</a>
+                        <a href="#" class="btn btn-outline">List an Item</a>
+                    </div> -->
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1689280730533-4fdacc46e6c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwZnVybml0dXJlJTIwY2hhaXJ8ZW58MXx8fHwxNzU3MDUyMTUwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                         alt="Featured marketplace items" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Browse by Category</h2>
+                <p>Find exactly what you're looking for in our organized categories</p>
+            </div>
+            
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-card-inner">
+                        <img src="https://images.unsplash.com/photo-1689280730533-4fdacc46e6c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwZnVybml0dXJlJTIwY2hhaXJ8ZW58MXx8fHwxNzU3MDUyMTUwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                             alt="Furniture" class="category-image" />
+                        <div class="category-overlay">
+                            <div class="category-text">
+                                <h3>Furniture</h3>
+                                <p>1247 items</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-card-inner">
+                        <img src="https://images.unsplash.com/photo-1599819511939-d2f7206fe892?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1c2VkJTIwZWxlY3Ryb25pY3MlMjBsYXB0b3B8ZW58MXx8fHwxNzU3MTMxNzYwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                             alt="Electronics" class="category-image" />
+                        <div class="category-overlay">
+                            <div class="category-text">
+                                <h3>Electronics</h3>
+                                <p>892 items</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-card-inner">
+                        <img src="https://images.unsplash.com/photo-1737205788369-77514fcab7b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWNvbmQlMjBoYW5kJTIwYm9va3N8ZW58MXx8fHwxNzU3MTMxNzYwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                             alt="Books" class="category-image" />
+                        <div class="category-overlay">
+                            <div class="category-text">
+                                <h3>Books</h3>
+                                <p>634 items</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-card-inner">
+                        <img src="https://images.unsplash.com/photo-1634133118577-d70216e68eae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwY2xvdGhpbmclMjBmYXNoaW9ufGVufDF8fHx8MTc1NzEzMTc2MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                             alt="Fashion" class="category-image" />
+                        <div class="category-overlay">
+                            <div class="category-text">
+                                <h3>Fashion</h3>
+                                <p>1156 items</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-card-inner">
+                        <img src="https://images.unsplash.com/photo-1665059613973-3e0eef25ac0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1c2VkJTIwY2FyJTIwdmVoaWNsZXxlbnwxfHx8fDE3NTcxMzE3NjF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                             alt="Vehicles" class="category-image" />
+                        <div class="category-overlay">
+                            <div class="category-text">
+                                <h3>Vehicles</h3>
+                                <p>423 items</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-card-inner">
+                        <img src="https://images.unsplash.com/photo-1626256226202-7989ae22548e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwY2FtZXJhJTIwcGhvdG9ncmFwaHl8ZW58MXx8fHwxNzU3MTI4MTkzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                             alt="Photography" class="category-image" />
+                        <div class="category-overlay">
+                            <div class="category-text">
+                                <h3>Photography</h3>
+                                <p>378 items</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="section section-muted">
+        <div class="container">
+            <div class="products-header">
+                <div class="products-title">
+                    <h2>Featured Items</h2>
+                    <p>Hand-picked deals and quality items near you</p>
+                </div>
+                
+                <div class="products-controls">
+                    <button class="filter-button">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"></polygon>
+                        </svg>
+                        Filter
+                    </button>
+                    <div class="view-buttons">
+                        <button class="view-button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                                <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                                <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                                <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+                            </svg>
+                        </button>
+                        <button class="view-button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" x2="21" y1="6" y2="6"></line>
+                                <line x1="8" x2="21" y1="12" y2="12"></line>
+                                <line x1="8" x2="21" y1="18" y2="18"></line>
+                                <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                                <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                                <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1689280730533-4fdacc46e6c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwZnVybml0dXJlJTIwY2hhaXJ8ZW58MXx8fHwxNzU3MDUyMTUwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Vintage Leather Armchair" class="product-image" />
+                            <button class="product-like-btn liked">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Like New</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Vintage Leather Armchair - Excellent Condition</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$450</span>
+                                <span class="product-price-original">$850</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Downtown • 2.3 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1599819511939-d2f7206fe892?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1c2VkJTIwZWxlY3Ryb25pY3MlMjBsYXB0b3B8ZW58MXx8fHwxNzU3MTMxNzYwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="MacBook Pro" class="product-image" />
+                            <button class="product-like-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Good</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">MacBook Pro 2019 - 16 inch, i7, 16GB RAM</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$1200</span>
+                                <span class="product-price-original">$2400</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                West Side • 4.1 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1737205788369-77514fcab7b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWNvbmQlMjBoYW5kJTIwYm9va3N8ZW58MXx8fHwxNzU3MTMxNzYwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Classic Literature Books" class="product-image" />
+                            <button class="product-like-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Very Good</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Collection of Classic Literature Books</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$85</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                University Area • 1.8 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1634133118577-d70216e68eae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwY2xvdGhpbmclMjBmYXNoaW9ufGVufDF8fHx8MTc1NzEzMTc2MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Vintage Designer Jacket" class="product-image" />
+                            <button class="product-like-btn liked">
+                                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Excellent</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Vintage Designer Jacket - Size M</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$120</span>
+                                <span class="product-price-original">$300</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Fashion District • 3.2 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1626256226202-7989ae22548e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwY2FtZXJhJTIwcGhvdG9ncmFwaHl8ZW58MXx8fHwxNzU3MTI4MTkzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Canon DSLR Camera" class="product-image" />
+                            <button class="product-like-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Good</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Professional Canon DSLR Camera Kit</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$650</span>
+                                <span class="product-price-original">$1200</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Arts Quarter • 5.7 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1706892807280-f8648dda29ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwd2F0Y2glMjBhY2Nlc3Nvcmllc3xlbnwxfHx8fDE3NTcwOTE2Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Luxury Watch" class="product-image" />
+                            <button class="product-like-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Like New</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Luxury Watch - Swiss Made, Automatic</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$850</span>
+                                <span class="product-price-original">$1500</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Uptown • 6.2 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1751048478961-f11df7b92e2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1c2VkJTIwYmljeWNsZSUyMGJpa2V8ZW58MXx8fHwxNzU3MTMxODAwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Road Bike" class="product-image" />
+                            <button class="product-like-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Very Good</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Road Bike - Carbon Frame, Shimano Components</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$750</span>
+                                <span class="product-price-original">$1400</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Riverside • 3.9 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-image-container">
+                            <img src="https://images.unsplash.com/photo-1744472649709-22a4eedb172a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXRybyUyMGdhbWluZyUyMGNvbnNvbGV8ZW58MXx8fHwxNzU3MTMxODAxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" 
+                                 alt="Gaming Console" class="product-image" />
+                            <button class="product-like-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path>
+                                </svg>
+                            </button>
+                            <span class="product-condition">Good</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Retro Gaming Console with 20 Games</h3>
+                            <div class="product-price">
+                                <span class="product-price-current">$180</span>
+                            </div>
+                            <div class="product-location">
+                                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                Tech District • 2.7 miles
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="btn btn-outline" style="color: var(--foreground); border-color: var(--border);">
+                    View All Items
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Remarket</h3>
+                    <p>Your trusted local marketplace for buying and selling pre-loved items.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>For Buyers</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">How to Buy</a></li>
+                        <li><a href="#">Safety Tips</a></li>
+                        <li><a href="#">Payment Options</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>For Sellers</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">List an Item</a></li>
+                        <li><a href="#">Selling Tips</a></li>
+                        <li><a href="#">Pricing Guide</a></li>
+                        <li><a href="#">Seller Protection</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Community Guidelines</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Remarket. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add basic interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Heart button functionality
+            const heartButtons = document.querySelectorAll('.product-like-btn');
+            heartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('liked');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        console.log('Searching for:', this.value);
+                        // Add search functionality here
+                    }
+                });
+            }
+
+            // Category card click
+            const categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const categoryName = this.querySelector('h3').textContent;
+                    console.log('Category clicked:', categoryName);
+                    // Add category navigation here
+                });
+            });
+
+            // Product card click
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const productName = this.querySelector('.product-title').textContent;
+                    console.log('Product clicked:', productName);
+                    // Add product detail navigation here
+                });
+            });
+        });
+    </script>
+</body>
+</html>
